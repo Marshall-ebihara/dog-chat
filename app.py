@@ -79,7 +79,7 @@ def get_recommendation():
     prompt = f"以下の情報をもとに、適した犬種を2つ提案してください:\n{user_answers}"
 
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "あなたは犬種診断の専門家です。"},
@@ -88,7 +88,7 @@ def get_recommendation():
             max_tokens=600,
             temperature=0.7
         )
-        result_text = response["choices"][0]["message"]["content"].strip()
+        result_text = response.choices[0].message.content.strip()
 
     except Exception as e:
         logging.error(f"OpenAI API エラー: {str(e)}")
