@@ -1,0 +1,219 @@
+/* 全体の背景とフォント */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* チャットコンテナ */
+.chat-container {
+    width: 90%;
+    max-width: 600px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+/* 骨型タイトル（犬モチーフのバナー） */
+.bone-title {
+    display: inline-block;
+    position: relative;
+    background-color: #f5deb3;  /* 骨っぽい色 */
+    color: #333;
+    text-align: center;
+    padding: 15px 80px;
+    border-radius: 30px;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+.bone-title::before,
+.bone-title::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #f5deb3;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+}
+.bone-title::before {
+    left: -60px;
+    box-shadow: 40px 0 0 #f5deb3;
+}
+.bone-title::after {
+    right: -60px;
+    box-shadow: -40px 0 0 #f5deb3;
+}
+
+/* メッセージ表示領域 */
+#chat-box {
+    width: 100%;
+    max-height: 600px;  /* 高さを拡大して長文も収める */
+    overflow-y: auto;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 吹き出しの基本スタイル */
+.bubble {
+    max-width: 75%;
+    padding: 15px 20px;
+    border-radius: 15px;
+    margin: 10px;
+    position: relative;
+    font-size: 1.1em;
+    line-height: 1.6; /* 行間を広げて読みやすく */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap !important; /* 改行を適用 */
+    word-break: break-word;
+    overflow: visible; /* 内容が切れずに表示 */
+}
+
+/* ボット（左寄せ） */
+.bot {
+    align-self: flex-start;
+}
+.bot .bubble {
+    background-color: #e0e0e0;
+    text-align: left;
+}
+.bot .bubble::after {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: -10px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 10px 10px 0;
+    border-color: transparent #e0e0e0 transparent transparent;
+}
+
+/* ユーザー（右寄せ） */
+.user {
+    align-self: flex-end;
+}
+.user .bubble {
+    background-color: #4caf50;
+    color: #fff;
+    text-align: right;
+}
+.user .bubble::after {
+    content: "";
+    position: absolute;
+    top: 20px;
+    right: -10px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 0 10px 10px;
+    border-color: transparent transparent transparent #4caf50;
+}
+
+/* ボタンのスタイル */
+button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin: 10px;
+}
+button:hover {
+    background-color: #0056b3;
+}
+
+/* 選択肢ボタンのコンテナ */
+#options {
+    text-align: center;
+}
+
+/* 診断結果を見るボタン */
+#getResultBtn {
+    font-size: 1.2em;
+    font-weight: bold;
+    width: 70%;
+    margin: 0 auto 20px;
+    display: block;
+}
+
+/* メディアクエリ（タブレット、スマホ対応） */
+@media screen and (max-width: 768px) {
+    .chat-container {
+        width: 95%;
+        padding: 15px;
+    }
+    .bone-title {
+        font-size: 1em;
+        padding: 10px 60px;
+    }
+    .bone-title::before,
+    .bone-title::after {
+        width: 25px;
+        height: 25px;
+    }
+    .bone-title::before {
+        left: -50px;
+        box-shadow: 35px 0 0 #f5deb3;
+    }
+    .bone-title::after {
+        right: -50px;
+        box-shadow: -35px 0 0 #f5deb3;
+    }
+    #chat-box {
+        max-height: 300px;
+    }
+    .bubble {
+        font-size: 1em;
+        margin: 8px;
+        padding: 12px 18px;
+    }
+    button {
+        font-size: 0.9em;
+        padding: 8px 16px;
+    }
+    #getResultBtn {
+        width: 80%;
+        font-size: 1.1em;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .chat-container {
+        padding: 10px;
+    }
+    .bone-title {
+        font-size: 0.9em;
+        padding: 8px 40px;
+    }
+    #chat-box {
+        max-height: 250px;
+    }
+    .bubble {
+        font-size: 0.95em;
+    }
+    button {
+        font-size: 0.85em;
+    }
+    #getResultBtn {
+        width: 85%;
+        font-size: 1em;
+    }
+}
+
+

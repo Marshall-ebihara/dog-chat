@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>犬種診断 Chatbot</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="chat-container">
+    <!-- 🦴 骨型のタイトル -->
+    <h1 class="bone-title">犬種診断 Chatbot</h1>
+    
+    <div id="chat-box">
+      <!-- 初回メッセージ（JavaScript で追加） -->
+    </div>
+    
+    <div id="options" class="center"></div>
+
+    <!-- 診断結果ボタン -->
+    <button id="getResultBtn" style="display: none;" onclick="getRecommendation()">診断結果を見る</button>
+
+    <!-- 診断中アニメーション -->
+    <div id="loading" class="loading-spinner" style="display: none;">
+      <div class="spinner"></div>
+      <p>診断中...</p>
+    </div>
+  </div>
+  
+  <script>
+    const chatBox = document.getElementById('chat-box');
+    const optionsDiv = document.getElementById('options');
+    const getResultBtn = document.getElementById('getResultBtn');
+    const loadingDiv = document.getElementById('loading');
+
+    function showLoading() {
+      getResultBtn.style.display = "none";
+      loadingDiv.style.display = "flex";
+    }
+
+    function hideLoading() {
+      loadingDiv.style.display = "none";
+    }
+
+    // 💬 メッセージを追加する関数（改行対応）
+    function addMessage(text, sender) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = sender;
+      const bubbleDiv = document.createElement('div');
+      bubbleDiv.className = 'bubble';
+
+      // 🔄 「\n」をHTMLの改行タグ <br> に変換
+      bubbleDiv.innerHTML = text.replace(/\n/g, '<br>');
+
+      messageDiv.appendChild(bubbleDiv);
+      chatBox.appendChild(messageDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // 🚀 最初のメッセージ（改行対応済み）
+    document.addEventListener("DOMContentLoaded", function() {
+        addMessage("犬種診断を始めます！\n質問に正直に答えてくださいね！", "bot");
+        nextQuestion();
+    });
+
+    // 💡 次の質問を取得
+    function nextQuestion(answer = null) {
+      if (answer) {
+        addMessage(answer, 'user');
+      }
+      fetch('/next_question', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({answer: answer})
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.end) {
+          addMessage("診断が完了しました！", "bot");
+          getResultBtn.style.display = "block";
+          optionsDiv.innerHTML = "";
+        } else {
+          addMessage(data.question, "bot");
+          optionsDiv.innerHTML = "";
+          data.choices.forEach(choice => {
+            const btn = document.createElement('button');
+            btn.innerText = choice;
+            btn.onclick = () => nextQuestion(choice);
+            optionsDiv.appendChild(btn);
+          });
+        }
+      });
+    }
+
+    // 📝 診断結果を取得
+    function getRecommendation() {
+      showLoading(); // 診断中アニメーションを表示
+
+      fetch('/get_recommendation', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then(response => response.json())
+      .then(data => {
+        hideLoading(); // 診断中アニメーションを非表示
+        addMessage("【診断結果】\n" + data.result, "bot");
+      })
+      .catch(error => {
+        hideLoading(); // エラー時にも診断中アニメーションを非表示
+        addMessage("エラーが発生しました。もう一度お試しください。", "bot");
+      });
+    }
+  </script>
+</body>
+</html>
