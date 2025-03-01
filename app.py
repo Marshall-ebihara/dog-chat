@@ -1,8 +1,13 @@
 from flask import Flask, render_template, request, session, jsonify
 import openai
+import os  # 環境変数を取得するために必要
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"  # セッション用の秘密鍵
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))  # Railway の PORT を取得
+    app.run(host="0.0.0.0", port=port)
 
 # 新しい質問リスト
 questions = [
