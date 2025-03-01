@@ -3,11 +3,16 @@ import openai
 import os
 import logging
 
+# 環境変数から API キーを取得
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
 # ログ設定
 logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
+
+
 
 # 質問リスト
 questions = [
