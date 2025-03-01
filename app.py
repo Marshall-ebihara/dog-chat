@@ -4,7 +4,7 @@ import os
 import logging
 
 # 環境変数から API キーを取得
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # ログ設定
 logging.basicConfig(level=logging.DEBUG)
